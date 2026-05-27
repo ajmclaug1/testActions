@@ -9,6 +9,7 @@ inputs:
     required: true
 
 runs:
+  using: composite
   steps:
     - name: Checkout code
       uses: actions/checkout@v4
@@ -21,11 +22,14 @@ runs:
       run: |
         # Your commands that require AWS credentials
         aws ec2 describe-instances --region eu-west-2 --output table
+      shell: bash
     - name: Setup Terraform
       uses: hashicorp/setup-terraform@v1
     - name: Terraform Init
       run: terraform init
-      working-directory: ${{ input.WORKDIR }}
+      shell: bash
+      working-directory: ${{ inputs.WORKDIR }}
     - name: Terraform plan
       run: terraform plan -input=false
-      working-directory: ${{ input.WORKDIR }}
+      shell: bash
+      working-directory: ${{ inputs.WORKDIR }}
