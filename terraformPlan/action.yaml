@@ -1,5 +1,13 @@
 name: terraform plan
 description: terraform plan and setup steps 
+inputs:
+  ARN_ROLE: 
+    description: arn role to assume
+    required: true
+  WORKDIR:
+    description: location tf config
+    required: true
+
 runs:
   steps:
     - name: Checkout code
@@ -7,7 +15,7 @@ runs:
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@main # Or a specific version
       with:
-        role-to-assume: ${{ secrets.ARN_ROLE }}
+        role-to-assume: ${{ inputs.ARN_ROLE }}
         aws-region: eu-west-2
     - name: Additional steps
       run: |
@@ -17,7 +25,7 @@ runs:
       uses: hashicorp/setup-terraform@v1
     - name: Terraform Init
       run: terraform init
-      working-directory: ${{ env.WORKDIR }}
+      working-directory: ${{ input.WORKDIR }}
     - name: Terraform plan
       run: terraform plan -input=false
-      working-directory: ${{ env.WORKDIR }}
+      working-directory: ${{ input.WORKDIR }}
