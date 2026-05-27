@@ -17,13 +17,13 @@ runs:
     - name: Checkout code
       uses: actions/checkout@v4
     - name : echo AWS credentials
+      shell: bash
       run: echo ${{ inputs.test }}
     - name: Configure AWS Credentials
       uses: aws-actions/configure-aws-credentials@main # Or a specific version
       with:
         role-to-assume: ${{ inputs.ARN_ROLE }}
         aws-region: eu-west-2
-
     - name: Additional steps
       run: |
         # Your commands that require AWS credentials
