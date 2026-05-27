@@ -1,0 +1,23 @@
+name: terraform plan
+description: terraform plan and setup steps 
+runs:
+  steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+    - name: Configure AWS Credentials
+      uses: aws-actions/configure-aws-credentials@main # Or a specific version
+      with:
+        role-to-assume: ${{ secrets.ARN_ROLE }}
+        aws-region: eu-west-2
+    - name: Additional steps
+      run: |
+        # Your commands that require AWS credentials
+        aws ec2 describe-instances --region eu-west-2 --output table
+    - name: Setup Terraform
+      uses: hashicorp/setup-terraform@v1
+    - name: Terraform Init
+      run: terraform init
+      working-directory: ${{ env.WORKDIR }}
+    - name: Terraform plan
+      run: terraform plan -input=false
+      working-directory: ${{ env.WORKDIR }}
